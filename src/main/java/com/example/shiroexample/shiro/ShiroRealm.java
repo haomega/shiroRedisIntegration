@@ -26,6 +26,11 @@ public class ShiroRealm extends AuthorizingRealm {
     }
 
     @Override
+    public String getName() {
+        return "shiroRealm";
+    }
+
+    @Override
     public boolean supports(AuthenticationToken token) {
         return token instanceof UsernamePasswordToken;
     }

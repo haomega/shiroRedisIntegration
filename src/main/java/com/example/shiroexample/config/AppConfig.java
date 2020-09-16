@@ -3,9 +3,13 @@ package com.example.shiroexample.config;
 import com.example.shiroexample.service.TelCodeService;
 import com.example.shiroexample.service.UserService;
 import com.example.shiroexample.shiro.MyAuthenticationFilter;
+import com.example.shiroexample.shiro.MyAuthentizing;
 import com.example.shiroexample.shiro.ShiroRealm;
 import com.example.shiroexample.shiro.TelRealm;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.Authorizer;
+import org.apache.shiro.authz.permission.PermissionResolver;
+import org.apache.shiro.authz.permission.RolePermissionResolver;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.cache.MemoryConstrainedCacheManager;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
@@ -83,6 +87,13 @@ public class AppConfig {
 
         sessionToken.setSessionDAO(redisSessionDAO);
         return sessionToken;
+    }
+
+    @Bean
+    public Authorizer authorizer() {
+        MyAuthentizing authentizing = new MyAuthentizing();
+
+        return authentizing;
     }
 
 

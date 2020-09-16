@@ -27,6 +27,11 @@ public class TelRealm extends AuthorizingRealm {
     }
 
     @Override
+    public String getName() {
+        return "telRealm";
+    }
+
+    @Override
     public boolean supports(AuthenticationToken token) {
         return token instanceof TelCodeAuthToken;
     }
