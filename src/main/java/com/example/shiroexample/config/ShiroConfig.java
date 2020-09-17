@@ -3,11 +3,11 @@ package com.example.shiroexample.config;
 import com.example.shiroexample.service.TelCodeService;
 import com.example.shiroexample.service.UserService;
 import com.example.shiroexample.shiro.MyAuthenticationFilter;
-import com.example.shiroexample.shiro.ShiroRealm;
-import com.example.shiroexample.shiro.TelRealm;
+import com.example.shiroexample.shiro.ShiroSessionManager;
+import com.example.shiroexample.shiro.realm.UserRealm;
+import com.example.shiroexample.shiro.realm.TelCodeRealm;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
-import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
 import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
@@ -21,16 +21,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-public class AppConfig {
+public class ShiroConfig {
 
+    /*
+    用户名密码登录
+     */
     @Bean
     public Realm realm(UserService userService) {
-        return new ShiroRealm(userService);
+        return new UserRealm(userService);
     }
 
+    /*
+    手机号验证码登录
+     */
     @Bean
     public Realm telRealm(TelCodeService telCodeService) {
-        return new TelRealm(telCodeService);
+        return new TelCodeRealm(telCodeService);
     }
 
     @Bean
@@ -38,7 +44,6 @@ public class AppConfig {
         DefaultShiroFilterChainDefinition chainDefinition = new DefaultShiroFilterChainDefinition();
 
         chainDefinition.addPathDefinition("/auth/login", "anon");
-        chainDefinition.addPathDefinition("/**", "myauth");
         chainDefinition.addPathDefinition("/**", "myauth");
 
         // or allow basic authentication, but NOT require it.
@@ -55,7 +60,9 @@ public class AppConfig {
 
         filterFactoryBean.setFilters(filterMap);
         filterFactoryBean.setFilterChainDefinitionMap(shiroFilterChainDefinition().getFilterChainMap());
-        filterFactoryBean.setLoginUrl("/error");
+        filterFactoryBean.setLoginUrl("/auth/401");
+        // todo: not work, because it is a authentication filter
+        filterFactoryBean.setUnauthorizedUrl("/auth/403");
 
         return filterFactoryBean;
     }
@@ -65,7 +72,7 @@ public class AppConfig {
     public ShiroSessionManager sessionManager() {
         // 自定义Session
         ShiroSessionManager sessionToken = new ShiroSessionManager();
-        // Session存储
+        // Session存储， 默认ip+port
         RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
         redisSessionDAO.setExpire(2 * 60 * 60);
         RedisManager redisManager = new RedisManager();
@@ -74,7 +81,6 @@ public class AppConfig {
         sessionToken.setSessionDAO(redisSessionDAO);
         return sessionToken;
     }
-
 
 
 }

@@ -15,6 +15,9 @@ public class MyAuthenticationFilter extends FormAuthenticationFilter {
         return super.getName();
     }
 
+    /*
+    覆盖这个方法，修改return逻辑，不保存失败的请求，redis里会产生很多无用的session
+     */
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
         if (isLoginRequest(request, response)) {
@@ -25,6 +28,7 @@ public class MyAuthenticationFilter extends FormAuthenticationFilter {
                 return true;
             }
         } else {
+            // do not save request
             redirectToLogin(request, response);
             return false;
         }

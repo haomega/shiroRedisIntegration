@@ -1,6 +1,5 @@
-package com.example.shiroexample.config;
+package com.example.shiroexample.shiro;
 
-import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.apache.shiro.web.servlet.ShiroHttpServletRequest;
@@ -12,7 +11,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.io.Serializable;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ShiroSessionManager extends DefaultWebSessionManager {
     private static final String AUTH_TOKEN = "X-Access-Token";
@@ -39,6 +37,9 @@ public class ShiroSessionManager extends DefaultWebSessionManager {
         }
     }
 
+    /*
+    获取在线用户
+     */
     public String getOnline() {
         Set<String> onlineUsers = new HashSet<>();
         Collection<Session> activeSessions = getActiveSessions();
@@ -46,8 +47,7 @@ public class ShiroSessionManager extends DefaultWebSessionManager {
             String princle = session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY).toString();
             onlineUsers.add(princle);
         }
-        String onlines = String.join(",", onlineUsers);
-        return onlines;
+        return String.join(",", onlineUsers);
     }
 
 

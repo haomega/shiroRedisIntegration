@@ -1,15 +1,11 @@
 package com.example.shiroexample.controller;
 
-import com.example.shiroexample.config.ShiroSessionManager;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.example.shiroexample.shiro.ShiroSessionManager;
 import org.apache.shiro.authz.annotation.RequiresRoles;
-import org.apache.shiro.session.mgt.SessionManager;
-import org.apache.shiro.web.session.mgt.WebSessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
 public class HelloWorldController {

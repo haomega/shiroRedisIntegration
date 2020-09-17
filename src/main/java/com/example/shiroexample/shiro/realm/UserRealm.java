@@ -1,4 +1,4 @@
-package com.example.shiroexample.shiro;
+package com.example.shiroexample.shiro.realm;
 
 import com.example.shiroexample.service.UserService;
 import org.apache.shiro.authc.*;
@@ -11,11 +11,11 @@ import org.apache.shiro.subject.PrincipalCollection;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ShiroRealm extends AuthorizingRealm {
+public class UserRealm extends AuthorizingRealm {
 
-    private UserService userService;
+    private final UserService userService;
 
-    public ShiroRealm(UserService userService) {
+    public UserRealm(UserService userService) {
         this.userService = userService;
         this.setCredentialsMatcher(new CredentialsMatcher() {
             @Override

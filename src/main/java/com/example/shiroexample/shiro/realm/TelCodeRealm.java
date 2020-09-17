@@ -1,6 +1,7 @@
-package com.example.shiroexample.shiro;
+package com.example.shiroexample.shiro.realm;
 
 import com.example.shiroexample.service.TelCodeService;
+import com.example.shiroexample.shiro.TelCodeAuthToken;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -17,10 +18,10 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * @author xdnb092
  */
-public class TelRealm extends AuthorizingRealm {
+public class TelCodeRealm extends AuthorizingRealm {
     private TelCodeService telCodeService;
 
-    public TelRealm(TelCodeService telCodeService) {
+    public TelCodeRealm(TelCodeService telCodeService) {
         this.telCodeService = telCodeService;
         this.setCredentialsMatcher(new CredentialsMatcher() {
             @Override
