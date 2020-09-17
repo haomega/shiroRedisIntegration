@@ -1,5 +1,8 @@
 package com.example.shiroexample.config;
 
+import org.apache.shiro.authz.UnauthenticatedException;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.apache.shiro.web.servlet.ShiroHttpServletRequest;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.apache.shiro.web.util.WebUtils;
@@ -8,12 +11,14 @@ import org.springframework.util.StringUtils;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.io.Serializable;
+import java.util.*;
+import java.util.stream.Collectors;
 
-public class ShiroSessionToken extends DefaultWebSessionManager {
+public class ShiroSessionManager extends DefaultWebSessionManager {
     private static final String AUTH_TOKEN = "X-Access-Token";
     private static final String REFERENCED_SESSION_ID_SOURCE = "Stateless request";
 
-    public ShiroSessionToken() {
+    public ShiroSessionManager() {
         super();
     }
 
@@ -32,6 +37,17 @@ public class ShiroSessionToken extends DefaultWebSessionManager {
             request.setAttribute(ShiroHttpServletRequest.REFERENCED_SESSION_ID_IS_VALID, Boolean.TRUE);
             return sessionId;
         }
+    }
+
+    public String getOnline() {
+        Set<String> onlineUsers = new HashSet<>();
+        Collection<Session> activeSessions = getActiveSessions();
+        for (Session session : activeSessions) {
+            String princle = session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY).toString();
+            onlineUsers.add(princle);
+        }
+        String onlines = String.join(",", onlineUsers);
+        return onlines;
     }
 
 

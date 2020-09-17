@@ -10,6 +10,10 @@ import javax.servlet.ServletResponse;
  */
 public class MyAuthenticationFilter extends FormAuthenticationFilter {
 
+    @Override
+    protected String getName() {
+        return super.getName();
+    }
 
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
@@ -21,6 +25,7 @@ public class MyAuthenticationFilter extends FormAuthenticationFilter {
                 return true;
             }
         } else {
+            redirectToLogin(request, response);
             return false;
         }
     }
